@@ -19,7 +19,7 @@ drug_info = {
 
 # Título de la aplicación
 st.title("Información de Fármacos")
-st.text ("En el curso de Farmacología es importante tener información básica de un fármaco. Con está app se podrá tener información básica de utilidad sobre los fármacos. Actualmente tiene solo dos en su base de datos "Paracetamol" e "Ibuprofeno". Si es otro fármaco dirá "Fármaco no encotrado")
+st.text("En el curso de Farmacología es importante tener información básica de un fármaco. Con está app se podrá tener información básica de utilidad sobre los fármacos. Actualmente tiene solo dos en su base de datos Paracetamol e Ibuprofeno. Si es otro fármaco dirá Fármaco no encotrado")
 # Entrada de texto para el nombre del fármaco
 drug_name = st.text_input("Introduce el nombre del fármaco:")
 
