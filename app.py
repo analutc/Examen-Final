@@ -1,46 +1,38 @@
 import streamlit as st
-import PyPDF2
-import nltk
-from nltk.tokenize import sent_tokenize
-import random
 
-# Descargar recursos necesarios de nltk
-nltk.download('punkt')
+# Diccionario de ejemplo con información de fármacos
+drug_info = {
+    "Paracetamol": {
+        "Grupo Farmacológico": "Analgésico y antipirético",
+        "Vías de Administración": "Oral, Rectal, Intravenosa",
+        "Mecanismo de Acción": "Inhibe la síntesis de prostaglandinas en el sistema nervioso central",
+        "Efectos Adversos": "Hepatotoxicidad, reacciones alérgicas"
+    },
+    "Ibuprofeno": {
+        "Grupo Farmacológico": "Antiinflamatorio no esteroideo (AINE)",
+        "Vías de Administración": "Oral, Tópica",
+        "Mecanismo de Acción": "Inhibe la enzima ciclooxigenasa (COX), reduciendo la síntesis de prostaglandinas",
+        "Efectos Adversos": "Gastrointestinales, renales, cardiovasculares"
+    }
+    # Agrega más fármacos según sea necesario
+}
 
-def extract_text_from_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-    text = ""
-    for page_num in range(pdf_reader.numPages):
-        page = pdf_reader.getPage(page_num)
-        text += page.extract_text()
-    return text
+# Título de la aplicación
+st.title("Información de Fármacos")
 
-def generate_questions(text):
-    sentences = sent_tokenize(text)
-    questions = []
-    for sentence in sentences:
-        words = sentence.split()
-        if len(words) > 5:  # Crear preguntas solo para oraciones más largas
-            word_to_blank = random.choice(words)
-            question = sentence.replace(word_to_blank, "_____")
-            questions.append((question, word_to_blank))
-    return questions
+# Entrada de texto para el nombre del fármaco
+drug_name = st.text_input("Introduce el nombre del fármaco:")
 
-def main():
-    st.title("Generador de Preguntas de Repaso")
-    st.write("Sube un archivo PDF y genera preguntas de repaso basadas en su contenido.")
+# Buscar y mostrar la información del fármaco
+if drug_name:
+    info = drug_info.get(drug_name)
+    if info:
+        st.subheader(f"Información sobre {drug_name}")
+        st.write(f"**Grupo Farmacológico:** {info['Grupo Farmacológico']}")
+        st.write(f"**Vías de Administración:** {info['Vías de Administración']}")
+        st.write(f"**Mecanismo de Acción:** {info['Mecanismo de Acción']}")
+        st.write(f"**Efectos Adversos:** {info['Efectos Adversos']}")
+    else:
+        st.error("Fármaco no encontrado. Por favor, verifica el nombre e intenta nuevamente.")
 
-    pdf_file = st.file_uploader("Subir PDF", type=["pdf"])
-
-    if pdf_file is not None:
-        text = extract_text_from_pdf(pdf_file)
-        questions = generate_questions(text)
-
-        st.write("### Preguntas Generadas:")
-        for i, (question, answer) in enumerate(questions):
-            st.write(f"**Pregunta {i+1}:** {question}")
-            st.write(f"**Respuesta:** {answer}")
-            st.write("---")
-
-if __name__ == "__main__":
-    main()
+# Ejecuta la aplicación con: streamlit run app.py
